@@ -7,7 +7,7 @@ ARG artifact=target/spring-boot-mongo
 
 WORKDIR /opt/app
 
-COPY ${artifact} squashers.war
+COPY ${artifact} /squashers.war
 
 # This should not be changed
 ENTRYPOINT ["java","-jar","squashers.war"]
