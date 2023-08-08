@@ -1,12 +1,15 @@
-# You can change this base image to anything else
-# But make sure to use the correct version of Java
+# Use the official AdoptOpenJDK base image
 FROM adoptopenjdk/openjdk11:alpine-jre
 
-# Simply the artifact path
-ARG artifact=target/spring-boot-mongo
+# Specify the JAR file name
+ARG artifact=target/spring-boot-mongo-1.0.jar
 
+# Set the working directory within the container
 WORKDIR /opt/app
 
+# Copy the compiled JAR file to the container
 COPY ${artifact} /squashers.war
 
+# Set the entry point for running the Spring Boot application
 ENTRYPOINT ["java", "-jar", "squashers.war"]
+
