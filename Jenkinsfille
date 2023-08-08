@@ -1,8 +1,8 @@
 pipeline {
   agent {
     docker {
-      image 'zaralink/bugsquashers-build-agent:1.0'
-      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
+      image 'zaralink/jenkins-node:1'
+      //args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount //Docker socket to access the host's Docker daemon
     }
   }
   stages {
@@ -30,8 +30,8 @@ pipeline {
     }
     stage('Build and Push Docker Image to imageRegistry') {
       environment {
-        DOCKER_IMAGE = "zaralink/ultimate-cicd:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "https://github.com/steph-nnamani/ci-cd-with-docker-argocd/Dockerfile"
+        DOCKER_IMAGE = "zaralink/bugsquashers:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "https://github.com/steph-nnamani/b-squash/Dockerfile"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
     steps {
@@ -46,17 +46,17 @@ pipeline {
     }
     stage('Update Deployment File') {
         environment {
-            GIT_REPO_NAME = "personal-container-artifactory"
-            GIT_USER_NAME = "snnamani"
+            GIT_REPO_NAME = "bug-squa-deploy"
+            GIT_USER_NAME = "steph-nnamani"
         }
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
-                    git config user.email "stephennnamani@yahoo.com"
-                    git config user.name "Stephen Nnamani"
+                    git config user.email "steph.nnamani@gmail.com"
+                    git config user.name "Steph-nnamani"
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" personal-container-artifactory/deployment.yml
-                    git add personal-container-artifactory/deployment.yml
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" bug-squa-deploy/deployment.yml
+                    git add bug-squa-deploy/deployment.yml
                     git commit -m "Updated deployment image to version ${BUILD_NUMBER}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
@@ -65,3 +65,4 @@ pipeline {
        }
       }
     }
+        
