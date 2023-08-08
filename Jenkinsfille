@@ -19,6 +19,6 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        
-    
-
+    }
+    // You can add more stages here
+}
