@@ -10,4 +10,4 @@ WORKDIR /opt/app
 COPY ${artifact} squashers.war
 
 # This should not be changed
-ENTRYPOINT ["java","-jar","app.war"]
+ENTRYPOINT ["java","-jar","squashers.war"]
