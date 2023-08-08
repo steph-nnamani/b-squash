@@ -7,7 +7,7 @@ ARG artifact=target/*
 
 WORKDIR /opt/app
 
-COPY ${artifact} app.war
+COPY ${artifact} squashers.war
 
 # This should not be changed
 ENTRYPOINT ["java","-jar","app.war"]
